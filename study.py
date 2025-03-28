@@ -12,7 +12,26 @@ class UserInputType(Enum):
     BATCH_SLIDE = "b"
     PREVIOUS_SLIDE = "p"
     SKIP_SLIDE = "s"
+    ASK_QUESTION = "a"
     QUIT = "q"
+
+def ask_question(question):
+    completion = client.chat.completions.create(
+            model="gpt-4o",
+            messages=[
+                {
+                    "role": "system",
+                    "content": SYSTEM_PROMPT,
+                },
+                {
+                    "role": "user",
+                    "content": [
+                        { "type": "text", "text": question },
+                    ]
+                }
+            ]
+    )
+    return completion.choices[0].message.content
 
 def main():
     
@@ -27,6 +46,7 @@ def main():
     while page_no < len(doc):
 
         print(f"Page {page_no + 1}")
+        # TODO: Update menu
         command = input(USER_INPUT_REQUEST).strip().lower()
         while command not in {item.value for item in UserInputType}:
             command = input(USER_INPUT_REQUEST).strip().lower()
@@ -41,6 +61,12 @@ def main():
         elif command == UserInputType.NEXT_SLIDE.value:
             page = [doc[page_no]]
             page_no += 1
+        elif command == UserInputType.ASK_QUESTION.value:
+            # TODO: make question response more tailored and concise
+            # TODO: send slide content along with question for context
+            question = input("Enter your question: ")
+            print(ask_question(question))
+            continue
         elif command == UserInputType.PREVIOUS_SLIDE.value:
             page_no -= 1
             continue
