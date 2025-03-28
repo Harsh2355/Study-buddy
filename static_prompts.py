@@ -50,6 +50,8 @@ Challenges and Limitations: Discuss any current challenges, limitations, or ongo
 Engage Critically: Encourage critical thinking by posing thought-provoking questions and discussing potential implications or ethical considerations.
 
 Structured Response: Organize your response in a clear, logical structure with headings, subheadings, and bullet points where appropriate. Use formatting to enhance readability.
+
+Minimum 2000 words!!!.
 """
 
 USER_INPUT_REQUEST = "Enter command (n: next, s: skip): "
