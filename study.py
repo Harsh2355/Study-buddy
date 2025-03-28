@@ -9,6 +9,8 @@ client = OpenAI()
 
 class UserInputType(Enum):
     NEXT_SLIDE = "n"
+    BATCH_SLIDE = "b"
+    PREVIOUS_SLIDE = "p"
     SKIP_SLIDE = "s"
     QUIT = "q"
 
@@ -21,25 +23,48 @@ def main():
     doc = pymupdf.open(content_pdf_path)
 
     # convert each page into image
-    page_no = 1
-    for page in doc:
+    page_no = 0
+    while page_no < len(doc):
 
-        print(f"Page {page_no}")
-        page_no += 1
+        print(f"Page {page_no + 1}")
         command = input(USER_INPUT_REQUEST).strip().lower()
         while command not in {item.value for item in UserInputType}:
             command = input(USER_INPUT_REQUEST).strip().lower()
 
         if command == UserInputType.SKIP_SLIDE.value:
+            page_no += 1
+            continue
+        elif command == UserInputType.BATCH_SLIDE.value:
+            num_batch_pages = int(input("Enter the number of pages to batch: "))
+            page = doc[page_no : page_no + num_batch_pages]
+            page_no += num_batch_pages
+        elif command == UserInputType.NEXT_SLIDE.value:
+            page = [doc[page_no]]
+            page_no += 1
+        elif command == UserInputType.PREVIOUS_SLIDE.value:
+            page_no -= 1
             continue
         elif command == UserInputType.QUIT.value:
             print("Quitting...")
             break
 
-        pix = page.get_pixmap()
-        img_bytes = pix.tobytes("png")
+        user_content = {
+            "role": "user",
+            "content": [
+                { "type": "text", "text": USER_PROMPT },
+            ]
+        }
 
-        img_base64 = base64.b64encode(img_bytes).decode("utf-8")
+        for p in page:
+            pix = p.get_pixmap()
+            img_bytes = pix.tobytes("png")
+            img_base64 = base64.b64encode(img_bytes).decode("utf-8")
+            user_content["content"].append({
+                "type": "image_url",
+                "image_url": {
+                    "url": f"data:image/jpeg;base64,{img_base64}",
+                },
+            })
 
         completion = client.chat.completions.create(
             model="gpt-4o",
@@ -48,18 +73,7 @@ def main():
                     "role": "system",
                     "content": SYSTEM_PROMPT,
                 },
-                {
-                    "role": "user",
-                    "content": [
-                        { "type": "text", "text": USER_PROMPT },
-                        {
-                            "type": "image_url",
-                            "image_url": {
-                                "url": f"data:image/jpeg;base64,{img_base64}",
-                            },
-                        },
-                    ],
-                }
+                user_content
             ],
         )
         print(completion.choices[0].message.content + "\n\n\n")
