@@ -7,13 +7,11 @@ Please help me learn this topic thoroughly by:
 1. Explaining the main concept(s) presented in the slide in simple terms.
 2. Providing any necessary background information or definitions that would help me understand the topic better.
 3. Expanding on the information given in the slide with additional relevant details.
-3.1 Answer any questions that the slide raises (If no questions raised then please ignore this point).
+3.1 Answer any questions that the slide raises (If no questions raised then please ignore this point). Do not just list the question but answer it as well.
 4. Offering clear examples that illustrate the concept(s), including any examples mentioned in the slide.
 5. Using analogies or real-world applications to make the topic more relatable.
 6. If there are any diagrams or visual elements mentioned, please explain their significance and how they relate to the topic.
-7. Highlighting any key points or takeaways that I should remember.
-8. Suggesting how this topic connects to other areas of computer science or its practical applications.
-9. If there are any common misconceptions about this topic, please address them.
+7. If there are any common misconceptions about this topic, please address them.
 
 Note: Keep in mind the content of the last slide as well while answering information from this slide.
 """
@@ -51,7 +49,7 @@ Engage Critically: Encourage critical thinking by posing thought-provoking quest
 
 Structured Response: Organize your response in a clear, logical structure with headings, subheadings, and bullet points where appropriate. Use formatting to enhance readability.
 
-Minimum 2000 words!!!.
+If there are multiple slides provided treat them as one big slide and your response should be based on the big slide (only if dealing with multiple slides being sent).
 """
 
-USER_INPUT_REQUEST = "Enter command (n: next, s: skip): "
+USER_INPUT_REQUEST = "Enter command: "
